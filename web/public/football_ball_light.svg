@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <!-- Background / Sphere Shading -->
+    <radialGradient id="sphereGrad" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="70%" stop-color="#F1F5F9"/>
+      <stop offset="100%" stop-color="#E2E8F0"/>
+    </radialGradient>
+
+    <!-- Center Pentagon Gradient with Tactical Turf Emerald & Grid -->
+    <linearGradient id="centerPentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#047857"/>
+      <stop offset="50%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#065F46"/>
+    </linearGradient>
+
+    <!-- Top Left Pentagon Gradient (Cobalt / Cyan Analytics) -->
+    <linearGradient id="topLeftGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#0369A1"/>
+    </linearGradient>
+
+    <!-- Top Right Pentagon Gradient (Obsidian Slate) -->
+    <linearGradient id="topRightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+
+    <!-- Chart Bars Gradient -->
+    <linearGradient id="barGrad1" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#6EE7B7"/>
+    </linearGradient>
+    <linearGradient id="barGrad2" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#34D399"/>
+    </linearGradient>
+    <linearGradient id="barGrad3" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#0EA5E9"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+    <linearGradient id="barGrad4" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#7DD3FC"/>
+    </linearGradient>
+
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <clipPath id="ballClip">
+      <circle cx="250" cy="250" r="238"/>
+    </clipPath>
+
+    <!-- Clip path for Center Pentagon (for charts) -->
+    <clipPath id="centerPentClip">
+      <polygon points="214,284 316,284 348,382 265,444 182,382"/>
+    </clipPath>
+  </defs>
+
+  <!-- Outer Sphere Base -->
+  <circle cx="250" cy="250" r="238" fill="url(#sphereGrad)" stroke="#0F172A" stroke-width="10"/>
+
+  <g clip-path="url(#ballClip)">
+    <!-- White Hexagon Panels with Subtle Tactical Pitch Contours -->
+    <!-- Top Central Hexagon -->
+    <path d="M194,84 L250,14 L306,84 L276,170 L224,170 Z" fill="#FFFFFF" stroke="#0F172A" stroke-width="6" stroke-linejoin="round"/>
+    
+    <!-- Left Hexagon -->
+    <path d="M84,158 L194,84 L224,170 L144,236 L66,206 Z" fill="#FAFAFC" stroke="#0F172A" stroke-width="6" stroke-linejoin="round"/>
+
+    <!-- Right Hexagon -->
+    <path d="M416,158 L306,84 L276,170 L356,236 L434,206 Z" fill="#F8FAFC" stroke="#0F172A" stroke-width="6" stroke-linejoin="round"/>
+
+    <!-- Mid-Chest Hexagons connecting to Center Pentagon -->
+    <path d="M224,170 L276,170 L316,284 L214,284 Z" fill="#FFFFFF" stroke="#0F172A" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M144,236 L224,170 L214,284 L126,348 L72,324 Z" fill="#F3F4F6" stroke="#0F172A" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M356,236 L276,170 L316,284 L404,348 L458,324 Z" fill="#F3F4F6" stroke="#0F172A" stroke-width="6" stroke-linejoin="round"/>
+
+    <!-- Bottom Seam Hexagons -->
+    <path d="M182,382 L214,284 L126,348 L138,446 L198,476 Z" fill="#FFFFFF" stroke="#0F172A" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M348,382 L316,284 L404,348 L392,446 L332,476 Z" fill="#FFFFFF" stroke="#0F172A" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M182,382 L265,444 L348,382 L332,476 L198,476 Z" fill="#F1F5F9" stroke="#0F172A" stroke-width="6" stroke-linejoin="round"/>
+
+    <!-- Perimeter Edge Patches -->
+    <!-- Far Left Patch -->
+    <path d="M12,238 C14,280 26,326 52,370 L72,324 L66,206 C40,214 22,224 12,238 Z" fill="#1E293B" stroke="#0F172A" stroke-width="6" stroke-linejoin="round"/>
+    
+    <!-- Far Right Bottom Patch -->
+    <path d="M488,238 C486,280 474,326 448,370 L428,324 L434,206 C460,214 478,224 488,238 Z" fill="#0F172A" stroke="#0F172A" stroke-width="6" stroke-linejoin="round"/>
+
+    <!-- Bottom Rim Patch -->
+    <path d="M198,476 L265,444 L332,476 C290,495 240,495 198,476 Z" fill="#0F172A" stroke="#0F172A" stroke-width="6"/>
+
+    <!-- ==================== PENTAGONS WITH COLOR & ANALYTICAL CHARTS ==================== -->
+
+    <!-- 1. TOP-LEFT PENTAGON (Cobalt / Cyan Analytics Cluster) -->
+    <g id="topLeftPentagon">
+      <polygon points="120,54 210,84 154,160 64,154 44,90" fill="url(#topLeftGrad)" stroke="#0F172A" stroke-width="7" stroke-linejoin="round"/>
+      
+      <!-- Internal Mini Hex Grid & Trendline -->
+      <path d="M70,140 Q110,120 140,85" fill="none" stroke="#38BDF8" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="4,3"/>
+      <circle cx="70" cy="140" r="3.5" fill="#FFFFFF"/>
+      <circle cx="106" cy="122" r="3.5" fill="#38BDF8"/>
+      <circle cx="140" cy="85" r="5" fill="#FFFFFF" stroke="#0284C7" stroke-width="2" filter="url(#glow)"/>
+      <circle cx="140" cy="85" r="2.5" fill="#0EA5E9"/>
+    </g>
+
+    <!-- 2. TOP-RIGHT PENTAGON (Deep Midnight Slate with Radar / Wave Lines) -->
+    <g id="topRightPentagon">
+      <polygon points="380,54 456,90 436,154 346,160 290,84" fill="url(#topRightGrad)" stroke="#0F172A" stroke-width="7" stroke-linejoin="round"/>
+      
+      <!-- Tactical Radar Waveform inside Pentagon -->
+      <path d="M316,110 L340,126 L366,100 L394,136 L424,96" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="366" cy="100" r="3.5" fill="#10B981"/>
+      <circle cx="394" cy="136" r="3.5" fill="#34D399"/>
+      <circle cx="424" cy="96" r="4" fill="#38BDF8" filter="url(#glow)"/>
+    </g>
+
+    <!-- 3. CENTER MAIN PENTAGON (Tactical Turf Emerald with Ascending Statistical Bar Charts) -->
+    <g id="centerPentagon">
+      <!-- Pentagon Base Fill -->
+      <polygon points="214,284 316,284 348,382 265,444 182,382" fill="url(#centerPentGrad)" stroke="#0F172A" stroke-width="7" stroke-linejoin="round"/>
+
+      <!-- Integrated Statistical Bar Chart inside Pentagon -->
+      <!-- Subdued Horizontal Grid Guides -->
+      <line x1="210" y1="385" x2="320" y2="385" stroke="#065F46" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <line x1="225" y1="350" x2="305" y2="350" stroke="#065F46" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <line x1="240" y1="315" x2="290" y2="315" stroke="#065F46" stroke-width="1.5" stroke-dasharray="3,3"/>
+
+      <!-- Bar 1 (Leftmost - Lowest) -->
+      <rect x="222" y="360" width="16" height="42" rx="3" fill="url(#barGrad1)"/>
+      
+      <!-- Bar 2 (Mid-Left) -->
+      <rect x="244" y="338" width="16" height="64" rx="3" fill="url(#barGrad2)"/>
+      
+      <!-- Bar 3 (Mid-Right) -->
+      <rect x="266" y="316" width="16" height="86" rx="3" fill="url(#barGrad2)"/>
+      
+      <!-- Bar 4 (Rightmost - Peak Trend Bar) -->
+      <rect x="288" y="295" width="16" height="107" rx="3" fill="url(#barGrad3)"/>
+
+      <!-- Upward Analytical Trendline connecting bar apexes -->
+      <path d="M230,360 L252,338 L274,316 L296,295" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- Glowing Cyan Apex Data Node -->
+      <circle cx="296" cy="295" r="6" fill="#0EA5E9" stroke="#FFFFFF" stroke-width="2" filter="url(#glow)"/>
+      <circle cx="296" cy="295" r="2.5" fill="#FFFFFF"/>
+
+      <!-- Mini Pulse Data Ring around peak -->
+      <circle cx="296" cy="295" r="10" fill="none" stroke="#38BDF8" stroke-width="1.5" opacity="0.6"/>
+    </g>
+
+    <!-- 4. BOTTOM LEFT PENTAGON / PATCH (Cyan Data Hub) -->
+    <g id="bottomLeftPatch">
+      <path d="M22,340 C14,300 20,260 32,230 L72,250 L84,330 L36,370 Z" fill="#0369A1" stroke="#0F172A" stroke-width="6" stroke-linejoin="round"/>
+      <line x1="40" y1="290" x2="68" y2="290" stroke="#38BDF8" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="68" cy="290" r="3.5" fill="#FFFFFF"/>
+    </g>
+
+    <!-- 5. BOTTOM RIGHT PENTAGON / PATCH (Emerald Pulse) -->
+    <g id="bottomRightPatch">
+      <path d="M478,340 C486,300 480,260 468,230 L428,250 L416,330 L464,370 Z" fill="#047857" stroke="#0F172A" stroke-width="6" stroke-linejoin="round"/>
+      <line x1="432" y1="290" x2="460" y2="290" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="432" cy="290" r="3.5" fill="#FFFFFF"/>
+    </g>
+
+  </g>
+
+  <!-- Outer Lighting & Specular Highlight Arc -->
+  <path d="M80,60 C130,25 210,18 290,26" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
+</svg>

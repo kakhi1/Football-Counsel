@@ -12,6 +12,7 @@ __pycache__/
 
 # Database
 football_consul.db
+football_counsel.db
 
 # Excluded Files
 chat_old.py
@@ -20,6 +21,7 @@ clean_database.py
 migrate.py
 system_prompt.txt
 serverconfig.txt
+
 # Playwright
 .playwright/
 google-credentials.json
@@ -29,7 +31,23 @@ chart.png
 test_crash.py
 test_flashscore_next.py
 test_headers.py
+fetch_html.py
 wc_qualifiers_parser.py
 deploy_script.py
 deploy.zip
 .zip
+*.bak
+
+# Private / Local Info & Temporary Review Docs
+DOMAIN_INFO.md
+*_report.md
+concepts_brief.md
+design_draft.md
+docs/
+
+# Node / Frontend Web
+node_modules/
+dist/
+web/dist/
+.vite/
+web/stitch_raw/

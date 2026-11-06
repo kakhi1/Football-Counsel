@@ -71,7 +71,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message:
         return
     welcome_text = (
-        "⚽ *Welcome to Football Consul!*\n\n"
+        "⚽ *Welcome to Football Counsel!*\n\n"
         "I am your AI data analyst. Send me a message to mine deep football stats, "
         "head-to-head records, and generate custom charts.\n\n"
         "You have *5 free analyses* to start. What should we look at?"
@@ -212,7 +212,7 @@ async def balance_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def send_premium_invoice(chat_id: int, context):
     """Sends an invoice using Telegram Stars 🌟"""
 
-    title = "Football Consul - Pro Pack ⚽"
+    title = "Football Counsel - Pro Pack ⚽"
     description = "Unlock 200 Deep-Dive AI Football Analyses and custom radar charts!"
     payload = "pro_pack_200"
 
@@ -812,7 +812,7 @@ def run_telegram_bot():
 def run_terminal_chat():
     print("🤖 Starting Terminal Mode...")
     chat = create_chat_session()
-    print("⚽ Football Consul is ready! Type 'exit' to close.")
+    print("⚽ Football Counsel is ready! Type 'exit' to close.")
     print("-" * 50)
 
     while True:
@@ -830,7 +830,7 @@ def run_terminal_chat():
             # Strip HTML tags so the terminal output looks clean
             clean_text = re.sub(r'<[^>]+>', '', text_output)
 
-            print(f"\n⚽ Football Consul: {clean_text}")
+            print(f"\n⚽ Football Counsel: {clean_text}")
             # print(f"\n⚽ Football Consul: {text_output}")
         except Exception as e:
             print(f"\n⚠️ Oops, I hit an error: {e}")

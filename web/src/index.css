@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Stitch Light Theme */
+  --color-bg-canvas: #faf8ff;
+  --color-bg-sidebar: #f1f5f9;
+  --color-bg-surface: #ffffff;
+  --color-surface-container: #eaedff;
+  --color-surface-container-low: #f2f3ff;
+  --color-surface-container-high: #e2e7ff;
+  --color-surface-container-highest: #dae2fd;
+  --color-surface-container-lowest: #ffffff;
+  --color-border: #e2e8f0;
+  --color-outline: #6d7a72;
+  --color-outline-variant: #bccac0;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #64748b;
+  --color-on-surface: #131b2e;
+  --color-on-surface-variant: #3d4a42;
+  --color-primary: #059669;
+  --color-primary-container: #00855d;
+  --color-on-primary: #ffffff;
+  --color-secondary: #006398;
+  --color-tertiary: #00628d;
+  --color-accent-emerald: #059669;
+  --color-accent-cobalt: #0284c7;
+  --color-accent-cyan: #0ea5e9;
+  --color-accent-error: #ba1a1a;
+}
+
+html.dark {
+  /* Stitch Dark Theme (Exact from stitch_raw) */
+  --color-bg-canvas: #0b0f17;
+  --color-bg-sidebar: #0e1420;
+  --color-bg-surface: #131b2e;
+  --color-surface-container: #122131;
+  --color-surface-container-low: #0d1c2d;
+  --color-surface-container-high: #1c2b3c;
+  --color-surface-container-highest: #273647;
+  --color-surface-container-lowest: #010f1f;
+  --color-border: #1e293b;
+  --color-outline: #86948a;
+  --color-outline-variant: #1e293b;
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
+  --color-on-surface: #f8fafc;
+  --color-on-surface-variant: #94a3b8;
+  --color-primary: #10b981;
+  --color-primary-container: #10b981;
+  --color-on-primary: #003824;
+  --color-secondary: #00a2e6;
+  --color-tertiary: #ffb95f;
+  --color-accent-emerald: #10b981;
+  --color-accent-cobalt: #0284c7;
+  --color-accent-cyan: #0ea5e9;
+  --color-accent-error: #ffb4ab;
+}
+
+body {
+  background-color: var(--color-bg-canvas);
+  color: var(--color-text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Material Symbols configuration */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.material-symbols-outlined.fill-1 {
+  font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+}
+
+/* Custom Tactical Scrollbar */
+.custom-scroll::-webkit-scrollbar {
+  display: none;
+}
+.custom-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ==========================================================================
+   Stitch Light & Dark Organic Ball Animations (Exact from MCP Stitch)
+   ========================================================================== */
+
+/* 1. Stitch Light Mode Organic Ball Rotation (Crisp Daylight Pacing) */
+@keyframes ballOrganicSpinLight {
+  0% { transform: rotate(0deg); }
+  18% { transform: rotate(0deg); }
+  26% { transform: rotate(38deg); }
+  38% { transform: rotate(35deg); }
+  50% { transform: rotate(180deg); }
+  65% { transform: rotate(190deg); }
+  72% { transform: rotate(175deg); }
+  84% { transform: rotate(360deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 2. Stitch Dark Mode Organic Ball Rotation (Deep Obsidian with Micro-Oscillations) */
+@keyframes ballOrganicSpinDark {
+  0% { transform: rotate(0deg); }
+  18% { transform: rotate(14deg); }
+  22% { transform: rotate(10deg); }
+  38% { transform: rotate(10deg); }
+  52% { transform: rotate(190deg); }
+  58% { transform: rotate(182deg); }
+  72% { transform: rotate(182deg); }
+  88% { transform: rotate(368deg); }
+  93% { transform: rotate(358deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Dedicated Light Mode Ball Class */
+.ball-animate-light {
+  animation: ballOrganicSpinLight 14s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  transform-origin: center center;
+  display: inline-block;
+  will-change: transform;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.20));
+}
+
+/* Dedicated Dark Mode Ball Class */
+.ball-animate-dark {
+  animation: ballOrganicSpinDark 14s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  transform-origin: center center;
+  display: inline-block;
+  will-change: transform;
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.35)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.7));
+}
+
+/* Theme-adaptive automatic ball animation */
+.ball-organic-spin {
+  animation: ballOrganicSpinLight 14s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  transform-origin: center center;
+  display: inline-block;
+  will-change: transform;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.18));
+}
+
+html.dark .ball-organic-spin {
+  animation: ballOrganicSpinDark 14s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.35)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.7));
+}
+
+.font-mono-stat {
+  font-family: 'JetBrains Mono', monospace;
+}

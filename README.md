@@ -1,110 +1,159 @@
-# Football Consul
+# Football Counsel (Football Consul)
 
-Football Consul is an AI-powered Telegram bot and analytics engine designed to analyze football statistics.
-
-It uses Playwright and BeautifulSoup to extract match stats and lineups into a local SQLite database. It features an AI agent that translates natural language into complex SQL queries, supporting both Google Gemini and local Ollama models.
+Football Counsel is an AI-powered match intelligence and tactical analytics platform that combines **real-time multi-league fixture & standings ingestion**, **historical match telemetry (xG, possession, shots, lineups)**, and **LLM/LangGraph tactical agents** into an interactive React dashboard, REST API, and Telegram/CLI assistant.
 
 ---
 
 ## 🚀 Key Features
 
-- **📊 Dynamic Data Visualization:** Automatically generates bar charts using `matplotlib` to visualize trends (e.g., shots over the last 5 games).
-- **🛡️ Anti-Hallucination Engine:** The bot is strictly forbidden from guessing. If data is missing or a query is invalid, it uses a self-correction loop or honestly informs the user that data is unavailable.
-- **🧠 Advanced SQL Logic & Memory:** Handles complex "Last N Games" queries and player-specific joins. It saves baseline stats to memory to answer follow-up questions accurately.
-- **📱 Unified Telegram Output:** Delivers charts and text breakdowns as a single, combined message (Photo + Caption) for a cleaner experience.
-- **🪟 Terminal Auto-Open:** Charts automatically pop open in your default Windows photo viewer when running in Terminal mode.
-- **🕷️ Automated Data Extraction:** Scrapes match stats, xG, possession, and lineups using `playwright` and `bs4`.
-- **🗄️ Serverless PostgreSQL Database:** Stores matches, teams, players, and match lineups efficiently in the cloud using Neon.
-- **🤖 LangGraph Multi-Agent Preview:** Automatically finds the next match, acts as a Data Analyst to extract critical insights from historical stats, and utilizes a Preview Agent to write a high-quality tactical narrative.
-- **🌐 AI Match Previews Website:** A sleek, premium static website that displays full Markdown-rendered match previews, served dynamically via a custom Flask API.
+- **⚡ 100% Live Upcoming Fixtures & Standings Engine (`sync_fixtures.py`):**
+  - Automatically ingests **verified live upcoming matches** and **live league table standings** across 7 elite competitions: **Premier League, LaLiga, Serie A, Bundesliga, Ligue 1, UEFA Champions League, and UEFA Europa League**.
+  - Uses ESPN's public scoreboard & calendar API (zero API key required) plus optional `football-data.org` v4 integration.
+  - Smart multi-week calendar lookahead automatically scans ahead across international or European breaks to guarantee real scheduled matchweeks—with **zero synthetic or fabricated fixtures**.
+  - Built-in network UTC clock synchronization (`get_real_network_utc_now()`) protects fixture filtering against local machine clock drift.
+- **🔥 Algorithmic Marquee & Impact Scoring (`0–100`):**
+  - Every upcoming fixture is scored and tagged in real time based on live league standings, points per game, historical rivalries (`El Clásico`, `Der Klassiker`, `Northwest Derby`, `Derby della Madonnina`, etc.), title deciders (`#1 vs #2–#3`), and UCL qualification battles.
+  - Automatically selects the **Featured Match of the Week** (`Impact 90–100`) and organizes games into **Midweek Magic (Tue–Thu)** and **Weekend Showdowns (Fri–Sun)**.
+- **🌐 Curated Matchday Intelligence Web App (`web/`):**
+  - Modern **React 19 + Vite + Tailwind CSS** application with **Dark & Light theme** support.
+  - **Curated Matchday Feed & All Fixtures Vault:** Filter by competition, time window (`All Marquee`, `Midweek`, `Weekend`), and live team search.
+  - **Tactical Projections on Every Card:** Displays live league ranks & points, expected tactical formations (`4-2-3-1`, `4-3-3`, etc.), historical xG projections, and a 3-way Win/Draw/Away probability bar.
+  - **Match Agent Workspace & Ask Consul AI Chat:** Deep-dive into individual match intelligence (`MatchAgentScreen`) or query the database in natural language (`AskConsulScreen`).
+  - **Tiered Access Funnel:** Supports Guest (`1st Game Free • No Login`), Free Member (`3 Daily Credits`), and Pro (`Unlimited`) tiers.
+- **⚡ Single-Query In-Memory Team Profile Engine (`api.py`):**
+  - Preloads all historical finished matches from `match_stats` in a **single SQL query** (`preload_all_team_rows`) and computes rolling xG, goals, possession, expected formations, and win probabilities across 130+ upcoming fixtures in ~`0.2s`.
+  - Automatically self-heals and re-syncs upcoming fixtures if the schedule is older than 6 hours or has fewer than 10 future games.
+- **🧠 Natural-Language-to-SQL AI Agent (`app.py`) & Multi-Agent Previews (`agent_preview.py`):**
+  - Translates natural language questions into SQL queries with an **Anti-Hallucination Engine**, self-correction loop, and conversational memory.
+  - Supports **Google Gemini** (`gemini-2.5-flash`) and local **Ollama** (`llama3.1` + `qwen2.5-coder`) models.
+  - Generates dynamic `matplotlib` charts delivered directly to **Telegram** or opened automatically in **Terminal mode**.
 
 ---
 
-## Prerequisites
+## 🗄️ Database Architecture
 
-- Python 3.8+
-- A Telegram Bot Token (from BotFather)
-- A Google Gemini API Key
-- A free Neon.tech account and PostgreSQL connection string
-- _Optional:_ [Ollama](https://ollama.com/) installed locally (if you plan to use local models)
+Football Counsel strictly separates historical finished match telemetry from live future schedule data across three core tables (compatible with both **Neon Serverless PostgreSQL** and local **SQLite** fallback):
+
+| Table | Purpose | Source |
+| :--- | :--- | :--- |
+| `match_stats` (+ `match_lineups`, `players`) | **Strictly finished historical matches** (scores, xG, possession, shots, corners, fouls, yellow/red cards, formations, starting XI & bench). Never polluted by unplayed fixtures. | `main_parser.py` (Flashscore Playwright scraper) |
+| `upcoming_fixtures` | **100% real future scheduled matches** (`fixture_id`, `competition`, `match_date`, `home_team`, `away_team`, `venue`, `is_marquee`, `impact_score`, `marquee_reason`). Automatically purges past games (`match_date < now - 2h`). | `sync_fixtures.py` (ESPN Public API + `football-data.org`) |
+| `team_standings` | **Live league table standings** (`team_name`, `competition`, `rank`, `points`, `played`, `wins`, `draws`, `losses`, `goal_diff`, `form`) across all 7 competitions. | `sync_fixtures.py` |
 
 ---
 
-## Setup Instructions
+## 🛠️ Prerequisites
+
+- **Python 3.9+**
+- **Node.js 18+** & **npm** (for the React + Vite web dashboard)
+- **Neon.tech PostgreSQL** connection string (automatically falls back to local SQLite `football_counsel.db` / `football_consul.db` if omitted)
+- **Google Gemini API Key** (for AI SQL chat & match intelligence)
+- _Optional:_ **Telegram Bot Token** (from `@BotFather` if running in Telegram mode)
+- _Optional:_ **Ollama** installed locally (if running with `AI_MODEL=ollama`)
+- _Optional:_ **`FOOTBALL_DATA_API_KEY`** (from `football-data.org`; not required as the ESPN Zero-Key API covers all 7 competitions out of the box)
+
+---
+
+## ⚙️ Setup Instructions
 
 ### 1. Clone the Repository
 
 ```bash
 git clone <your-repo-url>
-cd football-consul
+cd "Football Consul"
 ```
 
----
+### 2. Create and Activate a Python Virtual Environment
 
-### 2. Create and Activate a Virtual Environment
+**Windows (PowerShell):**
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
 
-Mac / Linux:
-
+**Mac / Linux:**
 ```bash
 python -m venv venv
 source venv/bin/activate
 ```
 
-Windows:
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
----
-
-### 3. Install Dependencies
+### 3. Install Backend & Scraper Dependencies
 
 ```bash
 pip install -r requirements.txt
-```
-
----
-
-### 4. Install Playwright Browsers
-
-This step is required for the web scraper to function.
-
-```bash
 playwright install chromium
 ```
 
----
+### 4. Install Frontend Dependencies
 
-### 5. Configure Environment Variables
+```bash
+cd web
+npm install
+cd ..
+```
 
-Create a `.env` file in the root directory and add:
+### 5. Configure Environment Variables (`.env`)
+
+Create a `.env` file in the project root:
 
 ```env
+# AI & Bot Configuration
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here
 GOOGLE_API_KEY=your_gemini_api_key_here
 GOOGLE_MODEL_NAME=gemini-2.5-flash
-PLATFORM=telegram  # Set to 'telegram' for the bot, or 'terminal' for local CLI chat
-AI_MODEL=google           # Set to 'google' for Gemini, or 'ollama' for local models
+PLATFORM=telegram          # 'telegram' for Telegram bot, or 'terminal' for local CLI chat
+AI_MODEL=google            # 'google' for Gemini, or 'ollama' for local models
 
 # Ollama Configuration (Used if AI_MODEL=ollama)
-OLLAMA_MODEL=llama3.1               # The conversational model
-SECOND_OLLAMA_MODEL=qwen2.5-coder   # The logic/SQL engine model
+OLLAMA_MODEL=llama3.1
+SECOND_OLLAMA_MODEL=qwen2.5-coder
 
-# Database Configuration
+# Database Configuration (Neon PostgreSQL)
 DATABASE_URL=postgresql://user:password@ep-your-host.region.aws.neon.tech/neondb?sslmode=require
-```
 
-You may change the model name to your preferred Gemini model if needed.
+# Optional: football-data.org API key (ESPN free API works automatically without this)
+FOOTBALL_DATA_API_KEY=
+```
 
 ---
 
-## Usage
+## 🚀 Usage Guide
 
-### Step 1: Build the Database
+### Step 1: Sync Live Upcoming Fixtures & League Standings
 
-Run the parser to scrape the latest football data and populate `football_consul.db`:
+Fetch the latest real-world upcoming matches and live standings across all 7 European competitions into PostgreSQL, local SQLite, and the frontend fallback snapshot:
+
+```bash
+python sync_fixtures.py
+```
+
+> **Note:** `api.py` also triggers `sync_fixtures.py` automatically in the background whenever the database has fewer than 10 future matches or hasn't been synced in the last 6 hours.
+
+---
+
+### Step 2: Run the Flask REST API & React Web Application
+
+1. **Start the Flask API Backend** (runs on `http://localhost:5000`):
+   ```bash
+   python api.py
+   ```
+
+2. **Start the React + Vite Frontend** (in a second terminal, runs on `http://localhost:5173`):
+   ```bash
+   cd web
+   npm run dev
+   ```
+
+3. **Production Frontend Build** (optional):
+   ```bash
+   npm --prefix web run build
+   ```
+
+---
+
+### Step 3: Scrape Historical Match Stats (`main_parser.py`)
+
+To scrape new finished match statistics, xG, and player lineups into `match_stats`:
 
 ```bash
 python main_parser.py
@@ -112,28 +161,22 @@ python main_parser.py
 
 ---
 
-### Step 2: Start the AI Agent
+### Step 4: Start the Telegram / Terminal SQL AI Bot (`app.py`)
 
-First, ensure your `PLATFORM` variable in the `.env` file is set to your desired mode (`telegram` or `terminal`).
+Ensure `PLATFORM` in `.env` is set to `telegram` or `terminal`:
 
 ```bash
 python app.py
 ```
 
-- **If you are using Telegram (`PLATFORM=telegram`):**
-  Send `/start` to your bot on Telegram and ask questions like:
-  - How many goals did a team score at home this season?
-  - Which team has the highest average possession?
-  - Show the last 5 match results for a specific team.
-
-- **If you are using the Terminal (`PLATFORM=terminal`):**
-  Type your questions directly into the command line prompt to chat with the AI locally and view your token usage.
+- **Telegram Mode (`PLATFORM=telegram`):** Send `/start` to your bot and ask questions about team averages, corners, fouls, xG, or player stats.
+- **Terminal Mode (`PLATFORM=terminal`):** Chat directly in your CLI, inspect generated SQL queries in real time, and view auto-opened `matplotlib` charts.
 
 ---
 
-### Step 3: Run the Multi-Agent Match Preview
+### Step 5: Generate LangGraph Multi-Agent Match Previews (`agent_preview.py`)
 
-You can automatically generate a tactical match preview for the next upcoming game. This workflow uses a **Data Analyst Agent** and a **Preview Agent** built on LangGraph to analyze historical stats and write a narrative.
+Run the autonomous **Data Analyst Agent + Preview Pundit Agent** workflow to generate rich Markdown tactical previews:
 
 ```bash
 python agent_preview.py
@@ -141,34 +184,21 @@ python agent_preview.py
 
 ---
 
-### Step 4: Run the API and View the Website
+## 🔌 REST API Endpoints (`api.py`)
 
-To see your generated AI previews on the sleek, interactive website:
-
-1. Start the Flask API server:
-   ```bash
-   python api.py
-   ```
-2. Open the `web/index.html` file in your browser. The website will automatically fetch the latest predictions from your PostgreSQL database and display them using a premium UI with animations and full Markdown rendering.
-
----
-
-## How It Works
-
-1. Playwright scrapes match data.
-2. BeautifulSoup parses and normalizes the HTML.
-3. Data is stored in a structured Postgres database hosted on Neon.
-4. Gemini converts natural language questions into SQL queries.
-5. The bot executes the query and returns an intelligent response.
-6. The `agent_preview.py` LangGraph workflow acts as a Data Analyst and Pundit to automatically preview upcoming matches.
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/matches` | Returns all verified upcoming fixtures enriched with live standings, expected formations, historical xG models, 3-way win probabilities, and marquee impact tags (`Featured Match of the Week`, `Midweek Magic`, `Weekend Showdowns`). |
+| `POST` | `/api/fixtures/sync` | Triggers an immediate live sync of upcoming fixtures and standings from ESPN / `football-data.org`. |
+| `GET` | `/api/matches/<match_id>` | Returns deep head-to-head telemetry, recent form, key tactical metrics, and AI preview narrative for a specific match. |
+| `POST` | `/api/chat` | Conversational AI endpoint supporting both **Match-Scoped Tactical Analysis** and **Global Database SQL Queries**. |
+| `GET` | `/api/stats/overview` | Returns high-level database telemetry (total historical matches tracked, teams, players, average goals, and xG leaders). |
 
 ---
 
-## Example Usage (Terminal Mode)
+## 💻 Example Usage (Terminal SQL Mode)
 
-When running the bot in the terminal (`PLATFORM=terminal`), you can see exactly how the AI translates your natural language into SQL queries, executes them against the database, and returns the results.
-
-Here is an example of a session analyzing team stats:
+When running `python app.py` with `PLATFORM=terminal`, you can watch the agent translate natural language into SQL and store results in conversational memory:
 
 ```text
 🤖 Starting Terminal Mode...
@@ -193,69 +223,54 @@ FROM (
 🧠 [Memory Saved]: osasuna_average_corners -> 3.192
 
 ⚽ Football Consul: Osasuna averages approximately 13.54 fouls and 3.19 corners per match.
---------------------------------------------------
+```
 
-You: when ossasuna plays at home, show all teams, what have avarage corners less 3.5
+---
 
-🤔 [Agent Thinking]: The user wants to see which teams, when playing away against Osasuna at home, had an average of less than 3.5 corners. I need to filter for Osasuna as the home team, group by the away team, and then filter those groups where the average away corners is less than 3.5.
-🗄️ [Running SQL]:
-SELECT
-  away_team AS opponent_team,
-  AVG(away_corners) AS average_opponent_corners
-FROM match_stats
-WHERE home_team LIKE '%Osasuna%'
-GROUP BY away_team
-HAVING AVG(away_corners) < 3.5;
+## 📁 Project Structure
 
-⚽ Football Consul: When Osasuna plays at home, the following teams had an average of less than 3.5 corners:
-* Alaves: 0.0 corners
-* Celta Vigo: 2.0 corners
-* Elche: 3.0 corners
-* Levante: 3.0 corners
-* Real Sociedad: 3.0 corners
-* Villarreal: 2.0 corners
---------------------------------------------------
+```text
+Football Consul/
+├── api.py                      # Flask REST API, single-query profile engine & auto-sync guard
+├── sync_fixtures.py            # Live 7-league upcoming fixtures & standings ingestion + Impact Engine
+├── app.py                      # Telegram & Terminal Natural-Language-to-SQL AI Agent
+├── agent_preview.py            # LangGraph Multi-Agent (Data Analyst + Pundit) preview generator
+├── main_parser.py              # Playwright + BeautifulSoup historical match & lineup scraper
+├── requirements.txt            # Python dependencies
+├── .env                        # Environment variables (ignored by Git)
+└── web/                        # React 19 + Vite + Tailwind CSS Frontend
+    ├── index.html
+    ├── package.json
+    ├── vite.config.js
+    └── src/
+        ├── App.jsx             # Root router, navigation & theme shell
+        ├── context/
+        │   ├── AppContext.jsx      # Global match state, access tiers & daily credits
+        │   └── ThemeContext.jsx    # Dark / Light mode persistence
+        ├── screens/
+        │   ├── UpcomingMatchesScreen.jsx  # Curated Matchday Feed, Hero Spotlight & All Fixtures
+        │   ├── MatchAgentScreen.jsx       # Deep-dive Match Intelligence & AI Tactical Chat
+        │   ├── AskConsulScreen.jsx        # Global natural-language database query workspace
+        │   ├── SignInScreen.jsx           # Free Member registration / sign-in flow
+        │   └── ProUpgradeScreen.jsx       # Pro subscription upgrade view
+        ├── components/
+        │   ├── MarqueeHeroCard.jsx        # Featured Match of the Week spotlight card
+        │   ├── MinimalFixtureCard.jsx     # Compact tactical fixture card
+        │   ├── Sidebar.jsx                # Desktop navigation & telemetry status
+        │   ├── TopAppBar.jsx              # Header navigation, tier badges & theme toggle
+        │   ├── BottomNavBar.jsx           # Mobile bottom navigation bar
+        │   └── ThemeSelector.jsx          # Light / Dark mode switcher
+        ├── services/
+        │   └── api.js                     # API client with timeout protection & live snapshot fallback
+        └── data/
+            └── baselineFixtures.js        # Auto-exported verified upcoming fixtures snapshot
 ```
 
 ---
 
 ## 💡 Roadmap & Monetization
 
-We are actively exploring several avenues to expand and monetize Football Consul:
-
-- **The "Bettor’s Edge" (B2C Subscription):** A freemium model where basic stats are free, but advanced predictive queries, xG analysis, and "Last N Games" trends require a Pro tier.
-- **Affiliate Partnerships:** Integrated odds comparison, offering users direct betting links alongside their statistical insights.
-- **Scout-as-a-Service:** A premium access tier designed for football YouTubers, journalists, and content creators who need instant, deep data without the high cost of enterprise tools like Opta.
-- **White-Label Solutions (B2B):** Licensing the core natural-language-to-SQL engine to sports news websites or local football clubs.
-
----
-
----
-
-## Project Structure (Example)
-
-```
-football-consul/
-│
-├── main_parser.py
-├── app.py
-├── agent_preview.py
-├── api.py
-├── web/
-│   ├── index.html
-│   ├── styles.css
-│   └── app.js
-├── requirements.txt
-├── .env
-└── README.md
-```
-
----
-
-## Notes
-
-- Always run the parser before starting the bot if you need fresh data.
-- Make sure your Telegram token and Gemini API key are valid.
-- The scraper depends on the target website’s HTML structure. Changes to the site may require parser updates.
-
----
+- **The "Bettor’s Edge" (B2C Subscription):** Freemium model where guests get 1 free match analysis, registered free members receive 3 daily AI credits, and Pro subscribers unlock unlimited deep tactical simulations and custom SQL queries.
+- **Affiliate & Odds Comparison Integration:** Side-by-side comparison of model win probabilities (`xG` & form-derived) against market implied probabilities.
+- **Scout-as-a-Service:** Instant tactical packs and visual exports for football analysts, journalists, and content creators.
+- **White-Label API (B2B):** Licensing the natural-language-to-SQL and Curated Matchday Impact Engine to sports media platforms.
