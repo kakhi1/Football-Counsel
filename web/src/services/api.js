@@ -5,7 +5,7 @@
  */
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
-export const TELEGRAM_BOT_URL = 'https://t.me/Football_Consul_bot';
+export const TELEGRAM_BOT_URL = 'https://t.me/Football_Counsel_bot';
 import { BASELINE_CURATED_DATA } from '../data/baselineFixtures';
 
 function getFilteredLiveSnapshot() {

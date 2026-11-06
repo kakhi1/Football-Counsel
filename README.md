@@ -1,4 +1,4 @@
-# Football Counsel (Football Consul)
+# Football Counsel
 
 Football Counsel is an AI-powered match intelligence and tactical analytics platform that combines **real-time multi-league fixture & standings ingestion**, **historical match telemetry (xG, possession, shots, lineups)**, and **LLM/LangGraph tactical agents** into an interactive React dashboard, REST API, and Telegram/CLI assistant.
 
@@ -18,7 +18,7 @@ Football Counsel is an AI-powered match intelligence and tactical analytics plat
   - Modern **React 19 + Vite + Tailwind CSS** application with **Dark & Light theme** support.
   - **Curated Matchday Feed & All Fixtures Vault:** Filter by competition, time window (`All Marquee`, `Midweek`, `Weekend`), and live team search.
   - **Tactical Projections on Every Card:** Displays live league ranks & points, expected tactical formations (`4-2-3-1`, `4-3-3`, etc.), historical xG projections, and a 3-way Win/Draw/Away probability bar.
-  - **Match Agent Workspace & Ask Consul AI Chat:** Deep-dive into individual match intelligence (`MatchAgentScreen`) or query the database in natural language (`AskConsulScreen`).
+  - **Match Agent Workspace & Ask Counsel AI Chat:** Deep-dive into individual match intelligence (`MatchAgentScreen`) or query the database in natural language (`AskCounselScreen`).
   - **Tiered Access Funnel:** Supports Guest (`1st Game Free • No Login`), Free Member (`3 Daily Credits`), and Pro (`Unlimited`) tiers.
 - **⚡ Single-Query In-Memory Team Profile Engine (`api.py`):**
   - Preloads all historical finished matches from `match_stats` in a **single SQL query** (`preload_all_team_rows`) and computes rolling xG, goals, possession, expected formations, and win probabilities across 130+ upcoming fixtures in ~`0.2s`.
@@ -46,7 +46,7 @@ Football Counsel strictly separates historical finished match telemetry from liv
 
 - **Python 3.9+**
 - **Node.js 18+** & **npm** (for the React + Vite web dashboard)
-- **Neon.tech PostgreSQL** connection string (automatically falls back to local SQLite `football_counsel.db` / `football_consul.db` if omitted)
+- **Neon.tech PostgreSQL** connection string (automatically falls back to local SQLite `football_counsel.db` if omitted)
 - **Google Gemini API Key** (for AI SQL chat & match intelligence)
 - _Optional:_ **Telegram Bot Token** (from `@BotFather` if running in Telegram mode)
 - _Optional:_ **Ollama** installed locally (if running with `AI_MODEL=ollama`)
@@ -203,7 +203,7 @@ When running `python app.py` with `PLATFORM=terminal`, you can watch the agent t
 ```text
 🤖 Starting Terminal Mode...
 ☁️ Using Google Gemini
-⚽ Football Consul is ready! Type 'exit' to close.
+⚽ Football Counsel is ready! Type 'exit' to close.
 --------------------------------------------------
 
 You: show ossasuna avarage fouls and corners
@@ -222,7 +222,7 @@ FROM (
 🧠 [Memory Saved]: osasuna_average_fouls -> 13.538
 🧠 [Memory Saved]: osasuna_average_corners -> 3.192
 
-⚽ Football Consul: Osasuna averages approximately 13.54 fouls and 3.19 corners per match.
+⚽ Football Counsel: Osasuna averages approximately 13.54 fouls and 3.19 corners per match.
 ```
 
 ---
@@ -230,7 +230,7 @@ FROM (
 ## 📁 Project Structure
 
 ```text
-Football Consul/
+Football-Counsel/
 ├── api.py                      # Flask REST API, single-query profile engine & auto-sync guard
 ├── sync_fixtures.py            # Live 7-league upcoming fixtures & standings ingestion + Impact Engine
 ├── app.py                      # Telegram & Terminal Natural-Language-to-SQL AI Agent
@@ -250,7 +250,7 @@ Football Consul/
         ├── screens/
         │   ├── UpcomingMatchesScreen.jsx  # Curated Matchday Feed, Hero Spotlight & All Fixtures
         │   ├── MatchAgentScreen.jsx       # Deep-dive Match Intelligence & AI Tactical Chat
-        │   ├── AskConsulScreen.jsx        # Global natural-language database query workspace
+        │   ├── AskCounselScreen.jsx       # Global natural-language database query workspace
         │   ├── SignInScreen.jsx           # Free Member registration / sign-in flow
         │   └── ProUpgradeScreen.jsx       # Pro subscription upgrade view
         ├── components/

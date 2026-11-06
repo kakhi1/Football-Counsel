@@ -101,7 +101,7 @@ export default function SignInScreen() {
             </div>
             <div className="flex justify-between">
               <span className="text-[#64748B] dark:text-[#94A3B8]">Telegram Integration:</span>
-              <span className="font-bold text-[#0284C7] dark:text-[#0EA5E9]">@Football_Consul_bot</span>
+              <span className="font-bold text-[#0284C7] dark:text-[#0EA5E9]">@Football_Counsel_bot</span>
             </div>
           </div>
 
@@ -246,7 +246,7 @@ export default function SignInScreen() {
             className="w-full py-2 rounded-xl bg-[#F1F5F9] hover:bg-[#E2E8F0] dark:bg-[#0B0F17] dark:hover:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#1E293B] text-[#64748B] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-[#F8FAFC] text-xs font-medium flex items-center justify-center gap-1.5 transition-colors active:scale-95"
           >
             <span className="material-symbols-outlined text-[16px] text-[#0284C7] dark:text-[#0EA5E9]">send</span>
-            <span>Sign In via @Football_Consul_bot</span>
+            <span>Sign In via @Football_Counsel_bot</span>
           </a>
         </div>
       </div>

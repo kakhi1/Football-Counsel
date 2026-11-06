@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext';
 import { sendAgentQuery } from '../services/api';
 import StatBallLogo from '../components/StatBallLogo';
 
-export default function AskConsulScreen() {
+export default function AskCounselScreen() {
   const { setCurrentScreen, activeMatch, dbStats } = useApp();
   const [showReasoning, setShowReasoning] = useState(false);
   const [inputValue, setInputValue] = useState('');

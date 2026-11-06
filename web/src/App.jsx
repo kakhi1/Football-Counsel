@@ -3,7 +3,7 @@ import { useApp } from './context/AppContext';
 import Sidebar from './components/Sidebar';
 import MobileHeader from './components/MobileHeader';
 import BottomNavBar from './components/BottomNavBar';
-import AskConsulScreen from './screens/AskConsulScreen';
+import AskCounselScreen from './screens/AskCounselScreen';
 import MatchAgentScreen from './screens/MatchAgentScreen';
 import UpcomingMatchesScreen from './screens/UpcomingMatchesScreen';
 import ProUpgradeScreen from './screens/ProUpgradeScreen';
@@ -17,7 +17,7 @@ export default function App() {
       case 'matches':
         return <UpcomingMatchesScreen />;
       case 'ask':
-        return <AskConsulScreen />;
+        return <AskCounselScreen />;
       case 'match':
         return <MatchAgentScreen />;
       case 'pro':

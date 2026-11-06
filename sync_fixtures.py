@@ -862,7 +862,7 @@ def fetch_from_football_data_api(api_key: str, known_teams: list[str], window_da
     date_from = real_now.strftime("%Y-%m-%d")
     date_to = (real_now + timedelta(days=window_days)).strftime("%Y-%m-%d")
     url = f"https://api.football-data.org/v4/matches?status=SCHEDULED,TIMED&dateFrom={date_from}&dateTo={date_to}"
-    req = urllib.request.Request(url, headers={"X-Auth-Token": api_key, "User-Agent": "FootballConsul/2.0"})
+    req = urllib.request.Request(url, headers={"X-Auth-Token": api_key, "User-Agent": "FootballCounsel/2.0"})
 
     comp_map = {
         "Premier League": "Premier League",

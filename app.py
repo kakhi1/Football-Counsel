@@ -468,7 +468,7 @@ def manage_memory(action: str, data: dict) -> str:
 
 
 def execute_sql_query(query: str, agent_understanding: str = "") -> str:
-    """Executes a SQL query on the football_consul.db SQLite database."""
+    """Executes a SQL query on the football_counsel.db SQLite database."""
     # if PLATFORM != "telegram":
     print(f"\n🤔 [Agent Thinking]: {agent_understanding}")
     print(f"🗄️ [Running SQL]: {query}")
@@ -831,7 +831,7 @@ def run_terminal_chat():
             clean_text = re.sub(r'<[^>]+>', '', text_output)
 
             print(f"\n⚽ Football Counsel: {clean_text}")
-            # print(f"\n⚽ Football Consul: {text_output}")
+            # print(f"\n⚽ Football Counsel: {text_output}")
         except Exception as e:
             print(f"\n⚠️ Oops, I hit an error: {e}")
 
